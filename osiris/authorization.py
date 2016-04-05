@@ -29,11 +29,16 @@ def password_authorization(request, username, password, scope, expires_in, bypas
     # Check if an existing token for the username and scope is already issued
     issued = storage.retrieve(username=username, scope=scope)
     if issued:
+        if issued.get('expire_time', 0) == 0:
+            expires_in = issued.get('expire_time', 0)
+        else:
+            expires_in = issued.get('expire_time').isoformat()
+
         # Return the already issued one
         return dict(access_token=issued.get('token'),
                     token_type='bearer',
                     scope=issued.get('scope'),
-                    expires_in=issued.get('expire_time').isoformat()
+                    expires_in=expires_in
                     )
     else:
         # Create and store token
