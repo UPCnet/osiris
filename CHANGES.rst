@@ -1,11 +1,16 @@
 ChangeLog
 =========
 
-1.5.7 (unreleased)
+1.5.7 (2016-04-06)
 ------------------
 
-- Nothing changed yet.
-
+* Update authorization expires_in [Pilar Marinas]
+* Merge pull request #3 from pmarinas/patch-1 [Víctor Fernández de Alba]
+*  [Víctor Fernández de Alba]
+* Update authorization.py [Víctor Fernández de Alba]
+* Update authorization.py [pmarinas]
+*  [pmarinas]
+* Solucionar error json datetime en token [pmarinas]
 
 1.5.6 (2015-12-17)
 ------------------
