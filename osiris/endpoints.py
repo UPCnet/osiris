@@ -4,6 +4,7 @@ from pyramid.response import Response
 from osiris.appconst import ACCESS_TOKEN_REGEX
 from osiris.errorhandling import OAuth2ErrorHandler
 from osiris.authorization import password_authorization
+from osiris.connector import get_connector
 
 import re
 from datetime import datetime
@@ -168,3 +169,79 @@ def revoke_token_endpoint(request):
         return HTTPUnauthorized()
 
     return HTTPUnauthorized()
+
+
+@view_config(name='username',
+             renderer='json',
+             request_method='GET',
+             http_cache=0)
+def username_endpoint(request):
+    """
+    The username endpoint is used by the client to obtain the username of user. The username
+    endpoint is used with every authorization grant except for the
+    implicit grant type (since an access token is issued directly).
+    """
+    params = extract_params(request)
+
+    username = params.get('username', None)
+    if username is None:
+        return OAuth2ErrorHandler.error_invalid_request('Required parameter username not found in the request')
+    elif re.search(r'[\w.-]+@[\w.-]+.\w+', username):
+        connector = get_connector(request)
+        username = connector.get_common_name(username)
+        if username is None:
+            return OAuth2ErrorHandler.error_invalid_user('The username not found')
+        else:
+            return username
+    else:
+        return username
+
+
+# Este hace lo mismo que el username_endpoint pero validando datos
+@view_config(name='username',
+             renderer='json',
+             request_method='POST',
+             http_cache=0)
+def username_endpoint2(request):
+    """
+    The username endpoint is used by the client to obtain the username of user. The username
+    endpoint is used with every authorization grant except for the
+    implicit grant type (since an access token is issued directly).
+    """
+    params = extract_params(request)
+    grant_type = params.get('grant_type')
+
+    # Authorization Code Grant
+    if grant_type == 'authorization_code':
+        return OAuth2ErrorHandler.error_unsupported_grant_type()
+    # Implicit Grant
+    elif grant_type == 'implicit':
+        return OAuth2ErrorHandler.error_unsupported_grant_type()
+    # Client Credentials
+    elif grant_type == 'client_credentials':
+        return OAuth2ErrorHandler.error_unsupported_grant_type()
+    # Client Credentials Grant
+    elif grant_type == 'password':
+        scope = params.get('scope', None)  # Optional
+        username = params.get('username', None)
+        password = params.get('password', None)
+
+        if username is None:
+            return OAuth2ErrorHandler.error_invalid_request('Required parameter username not found in the request')
+        elif password is None:
+            return OAuth2ErrorHandler.error_invalid_request('Required parameter password not found in the request')
+        elif re.search(r'[\w.-]+@[\w.-]+.\w+', username):
+            connector = get_connector(request)
+            username = connector.get_common_name(username)
+            if username is None:
+                return OAuth2ErrorHandler.error_invalid_user('The username not found')
+            else:
+                response = password_authorization(request, username, password, scope)
+                if 'access_token' in response:
+                    return username
+                else:
+                    return OAuth2ErrorHandler.error_invalid_user('The password is not authorization')
+        else:
+            return username
+    else:
+        return OAuth2ErrorHandler.error_unsupported_grant_type()

@@ -99,3 +99,16 @@ class OAuth2ErrorHandler(object):
         """
         return dict(error='invalid_scope',
                     error_description="")
+
+    @staticmethod
+    def error_invalid_user(error_description=""):
+        """
+            The request is missing a required parameter, includes an unsupported
+            parameter value (other than grant type), repeats a parameter,
+            includes multiple credentials, utilizes more than one mechanism for
+            authenticating the client, or is otherwise malformed.
+        """
+        error_response = dict(error='invalid_user',
+                              error_description=error_description)
+
+        return JSONHTTPBadRequest(error_response)

@@ -73,6 +73,28 @@ class LdapConnector(OsirisConnector):
         userid = self.normalize_username(username)
         return self.ldap.authenticate(userid, password)
 
+    def get_common_name(self, username):
+        """
+            Search for a user email on all tree under base_dn.
+        """
+        userid = self.normalize_username(username)
+        with self.ldap.manager.connection(self.ldap.manager.bind, self.ldap.manager.passwd) as conn:
+            search_id = conn.search(
+                self.request.registry.ldap_login_query.base_dn,
+                SCOPE_SUBTREE,
+                'mail={userid}'.format(userid=userid))
+            try:
+                result = conn.result(search_id)
+            except NO_SUCH_OBJECT:
+                # Only raised when base_dn don't exists
+                return False
+            else:
+                # Check if there's any matches.
+                if result[1] == []:
+                    return result[1]
+                else:
+                    return result[1][0][1]['cn'][0]
+
 
 class WhoConnector(OsirisConnector):
     def __init__(self, *args, **kwargs):
