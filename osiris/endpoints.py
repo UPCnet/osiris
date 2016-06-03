@@ -54,12 +54,13 @@ def token_endpoint(request):
         scope = params.get('scope', None)  # Optional
         username = params.get('username', None)
         password = params.get('password', None)
+        bypass = params.get('bypass', False)
         if username is None:
             return OAuth2ErrorHandler.error_invalid_request('Required parameter username not found in the request')
         elif password is None:
             return OAuth2ErrorHandler.error_invalid_request('Required parameter password not found in the request')
         else:
-            return password_authorization(request, username, password, scope)
+            return password_authorization(request, username, password, scope, bypass)
     else:
         return OAuth2ErrorHandler.error_unsupported_grant_type()
 
@@ -216,7 +217,7 @@ def username_endpoint2(request):
         return OAuth2ErrorHandler.error_unsupported_grant_type()
     # Implicit Grant
     elif grant_type == 'implicit':
-        return OAuth2ErrorHandler.error_unsupported_grant_type()
+        return OAuth2ErrorHandler.error_unsupportened_grant_type()
     # Client Credentials
     elif grant_type == 'client_credentials':
         return OAuth2ErrorHandler.error_unsupported_grant_type()

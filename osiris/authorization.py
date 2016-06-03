@@ -64,8 +64,9 @@ def password_authorization(request, username, password, scope, bypass=False):
             return dict(access_token=token,
                         token_type='bearer',
                         scope=scope,
-                        expires=token_expiration_timestamp,
+                        expires=token_expiration_time,
                         )
+
         else:
             # If operation error, return a generic server error
             return HTTPInternalServerError()
