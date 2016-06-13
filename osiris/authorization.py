@@ -35,7 +35,7 @@ def password_authorization(request, username, password, scope, expires_in, bypas
       except:
         expires_in_provisional = issued.get('expire_time')
     else:
-        expires_in_provissional = 0
+        expires_in_provisional = 0
 
     if issued:
         # Return the already issued one
