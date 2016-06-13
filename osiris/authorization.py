@@ -28,17 +28,21 @@ def password_authorization(request, username, password, scope, expires_in, bypas
     storage = request.registry.osiris_store
     # Check if an existing token for the username and scope is already issued
     issued = storage.retrieve(username=username, scope=scope)
-    if issued:
-        if issued.get('expire_time', 0) == 0:
-            expires_in = issued.get('expire_time', 0)
-        else:
-            expires_in = issued.get('expire_time').isoformat()
 
+    if issued:
+      try:
+        expires_in_provisional = issued.get('expire_time').isoformat()
+      except:
+        expires_in_provisional = issued.get('expire_time')
+    else:
+        expires_in_provissional = 0
+
+    if issued:
         # Return the already issued one
         return dict(access_token=issued.get('token'),
                     token_type='bearer',
                     scope=issued.get('scope'),
-                    expires_in=expires_in
+                    expires_in=expires_in_provisional
                     )
     else:
         # Create and store token
