@@ -59,6 +59,13 @@ def token_endpoint(request):
             return OAuth2ErrorHandler.error_invalid_request('Required parameter username not found in the request')
         elif password is None:
             return OAuth2ErrorHandler.error_invalid_request('Required parameter password not found in the request')
+        elif re.search(r'[\w.-]+@[\w.-]+.\w+', username):
+            connector = get_connector(request)
+            username = connector.get_common_name(username)
+            if username is None:
+                return OAuth2ErrorHandler.error_invalid_user('The username not found')
+            else:
+                return password_authorization(request, username, password, scope, bypass)
         else:
             return password_authorization(request, username, password, scope, bypass)
     else:
