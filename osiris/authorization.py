@@ -9,7 +9,6 @@ def password_authorization(request, username, password, scope, bypass=False):
 
     connector = get_connector(request)
     error_description = ''
-
     # Bypass authentication only if the user exists on the connector
     if bypass:
         if connector.user_exists(username):
@@ -30,11 +29,19 @@ def password_authorization(request, username, password, scope, bypass=False):
     # Check if an existing token for the username and scope is already issued
     issued = storage.retrieve(username=username, scope=scope)
     if issued:
+        try:
+            expires_in_provisional = issued.get('expire_time').isoformat()
+        except:
+            expires_in_provisional = issued.get('expire_time')
+    else:
+	expires_in_provisional = 0
+
+    if issued:
         # Return the already issued one
         return dict(access_token=issued.get('token'),
                     token_type='bearer',
                     scope=issued.get('scope'),
-                    expires=issued.get('expire_time')
+                    expires=expires_in_provisional
                     )
     else:
         token_duration = int(request.registry.settings.get('osiris.jwt.expiry', 0))
