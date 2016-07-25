@@ -1,11 +1,16 @@
 ChangeLog
 =========
 
-1.5.7 (unreleased)
+1.5.7 (2016-07-25)
 ------------------
 
-- Nothing changed yet.
-
+* token expire [root]
+* Add in token_endpoint authorization by mail [Pilar Marinas]
+* Solucionar get token restricted nou osirisjwt [Pilar Marinas]
+* Get username of user if username is email [Pilar Marinas]
+* Finish revoke token and tests [Carles Bruguera]
+* Fix unbounded var [Carles Bruguera]
+* Implement JWT and token expiration [Carles Bruguera]
 
 1.5.6 (2015-12-17)
 ------------------
