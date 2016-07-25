@@ -1,11 +1,13 @@
 ChangeLog
 =========
 
-1.5.8 (unreleased)
-------------------
+1.5.8.1 (2016-07-25)
+--------------------
 
-- Nothing changed yet.
-
+* Update authorization.py [Roberto Diaz]
+*  [Roberto Diaz]
+* mispelled word [Roberto Diaz]
+* PARA NO OLVIDAR! update authorization.py with json timestamp [roberto.diaz]
 
 1.5.7 (2016-04-06)
 ------------------
