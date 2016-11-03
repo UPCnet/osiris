@@ -37,9 +37,7 @@ def token_endpoint(request):
     implicit grant type (since an access token is issued directly).
     """
     params = extract_params(request)
-
     grant_type = params.get('grant_type')
-
     # Authorization Code Grant
     if grant_type == 'authorization_code':
         return OAuth2ErrorHandler.error_unsupported_grant_type()
@@ -54,7 +52,8 @@ def token_endpoint(request):
         scope = params.get('scope', None)  # Optional
         username = params.get('username', None)
         password = params.get('password', None)
-        bypass = params.get('bypass', False)
+        bypass_param = params.get('bypass', 'False')
+        bypass = False if bypass_param == 'False' else True
         if username is None:
             return OAuth2ErrorHandler.error_invalid_request('Required parameter username not found in the request')
         elif password is None:
