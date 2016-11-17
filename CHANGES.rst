@@ -1,11 +1,10 @@
 ChangeLog
 =========
 
-1.5.8.3 (unreleased)
+1.5.8.3 (2016-11-17)
 --------------------
 
-- Nothing changed yet.
-
+* Solucionar bug ulearnhub restricted password [Pilar Marinas]
 
 1.5.8.2 (2016-07-25)
 --------------------
