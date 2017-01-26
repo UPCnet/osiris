@@ -1,11 +1,10 @@
 ChangeLog
 =========
 
-1.5.8.4 (unreleased)
+1.5.8.4 (2017-01-26)
 --------------------
 
-- Nothing changed yet.
-
+* Solucionar error regex token que no permite ver el widget del max [Pilar Marinas]
 
 1.5.8.3 (2016-11-17)
 --------------------
